@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
 import { VehicleRequest } from "@/types/vehicle-request";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 import {
   HoverCard,
   HoverCardContent,
@@ -35,79 +35,88 @@ const VehicleRequestCalendar = ({
   const requestsByDate = React.useMemo(() => {
     const grouped = new Map<string, VehicleRequest[]>();
     requests.forEach((request) => {
-      const dateKey = format(
-        parseISO(request.startDate as unknown as string),
-        "yyyy-MM-dd",
-      );
-      const existing = grouped.get(dateKey) || [];
-      grouped.set(dateKey, [...existing, request]);
+      try {
+        const startDate = new Date(request.startDate);
+        const dateKey = format(startDate, "yyyy-MM-dd");
+        const existing = grouped.get(dateKey) || [];
+        grouped.set(dateKey, [...existing, request]);
+      } catch (error) {
+        console.error("Invalid date format:", request.startDate);
+      }
     });
     return grouped;
   }, [requests]);
 
   // Custom day render to show requests
   const renderDay = (day: Date) => {
-    const dateKey = format(day, "yyyy-MM-dd");
-    const dayRequests = requestsByDate.get(dateKey) || [];
+    try {
+      const dateKey = format(day, "yyyy-MM-dd");
+      const dayRequests = requestsByDate.get(dateKey) || [];
 
-    if (dayRequests.length === 0) return null;
+      if (dayRequests.length === 0) return null;
 
-    return (
-      <HoverCard>
-        <HoverCardTrigger asChild>
-          <div className="relative w-full h-full">
-            <div className="absolute bottom-1 left-1 right-1 flex gap-0.5">
-              {dayRequests.slice(0, 3).map((request, i) => (
-                <div
-                  key={request.id}
-                  className={cn(
-                    "h-1 flex-1 rounded-full",
-                    getStatusColor(request.status),
-                  )}
-                />
-              ))}
-              {dayRequests.length > 3 && (
-                <div className="h-1 w-1 rounded-full bg-gray-400" />
-              )}
+      return (
+        <HoverCard>
+          <HoverCardTrigger asChild>
+            <div className="relative w-full h-full">
+              <div className="absolute bottom-1 left-1 right-1 flex gap-0.5">
+                {dayRequests.slice(0, 3).map((request, i) => (
+                  <div
+                    key={request.id}
+                    className={cn(
+                      "h-1 flex-1 rounded-full",
+                      getStatusColor(request.status),
+                    )}
+                  />
+                ))}
+                {dayRequests.length > 3 && (
+                  <div className="h-1 w-1 rounded-full bg-gray-400" />
+                )}
+              </div>
             </div>
-          </div>
-        </HoverCardTrigger>
-        <HoverCardContent className="w-80">
-          <div className="space-y-2">
-            <h4 className="text-sm font-semibold">
-              {format(day, "MMMM d, yyyy")}
-            </h4>
-            <div className="space-y-1">
-              {dayRequests.map((request) => (
-                <div
-                  key={request.id}
-                  className="text-sm flex items-center justify-between"
-                >
-                  <div>
-                    <span className="font-medium">{request.requesterName}</span>
-                    <span className="text-muted-foreground">
-                      {" "}
-                      - {request.vehicleType}
-                    </span>
-                  </div>
-                  <Badge
-                    variant={
-                      request.status === "approved"
-                        ? "default"
-                        : request.status === "rejected"
-                          ? "destructive"
-                          : "secondary"
-                    }
+          </HoverCardTrigger>
+          <HoverCardContent className="w-80">
+            <div className="space-y-2">
+              <h4 className="text-sm font-semibold">
+                {format(day, "MMMM d, yyyy")}
+              </h4>
+              <div className="space-y-1">
+                {dayRequests.map((request) => (
+                  <div
+                    key={request.id}
+                    className="text-sm flex items-center justify-between"
                   >
-                    {request.status}
-                  </Badge>
-                </div>
-              ))}
+                    <div>
+                      <span className="font-medium">
+                        {request.requesterName}
+                      </span>
+                      <span className="text-muted-foreground">
+                        {" "}
+                        - {request.vehicleType}
+                      </span>
+                    </div>
+                    <Badge
+                      variant={
+                        request.status === "approved"
+                          ? "default"
+                          : request.status === "rejected"
+                            ? "destructive"
+                            : "secondary"
+                      }
+                    >
+                      {request.status}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </HoverCardContent>
-      </HoverCard>
-    );
+          </HoverCardContent>
+        </HoverCard>
+      );
+    } catch (error) {
+      console.error("Error rendering day:", error);
+      return null;
+    }
   };
 
   return (
