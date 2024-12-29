@@ -30,12 +30,16 @@ const Sidebar = ({ className = "", activePath = "/" }: SidebarProps) => {
   return (
     <div
       className={cn(
-        "w-[280px] h-full bg-background border-r px-3 py-4 flex flex-col",
+        "w-[280px] h-full bg-white/80 backdrop-blur-md border-r px-3 py-4 flex flex-col",
         className,
       )}
     >
       <div className="mb-8 px-4">
-        <h1 className="text-2xl font-bold text-primary">Fleet Manager</h1>
+        <img
+          src="/logo.png"
+          alt="PresServ Logo"
+          className="h-16 w-auto mx-auto"
+        />
       </div>
 
       <nav className="space-y-1">
@@ -61,7 +65,7 @@ const Sidebar = ({ className = "", activePath = "/" }: SidebarProps) => {
         })}
       </nav>
 
-      <div className="mt-auto px-4 py-4 border-t">
+      <div className="mt-auto px-4 py-4 border-t border-border/50">
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-full bg-primary/10">
             <img

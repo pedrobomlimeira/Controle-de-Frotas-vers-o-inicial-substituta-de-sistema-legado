@@ -7,8 +7,15 @@ import MaintenanceSchedule from "./dashboard/MaintenanceSchedule";
 import VehicleRequestForm from "./dashboard/VehicleRequestForm";
 import VehicleRequestCalendar from "./dashboard/VehicleRequestCalendar";
 import VehicleRequestApproval from "./dashboard/VehicleRequestApproval";
+import LanguageSelector from "./layout/LanguageSelector";
+import ThemeSelector from "./layout/ThemeSelector";
+import { themes } from "@/lib/themes.js";
+
+type Theme = "light" | "dark" | "blue";
 
 const Home = () => {
+  const [theme, setTheme] = React.useState<Theme>("light");
+
   // Mock user data - replace with actual auth data
   const mockUser = {
     id: "user-1",
@@ -65,55 +72,73 @@ const Home = () => {
     // Update requests list
   };
 
+  const currentTheme = themes[theme];
+
   return (
-    <div className="flex h-screen bg-gray-100">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto">
-        <header className="sticky top-0 z-10 bg-gray-100/95 backdrop-blur supports-[backdrop-filter]:bg-gray-100/75 border-b p-4">
-          <div className="flex items-center justify-between max-w-full mx-auto">
-            <CompanySelector />
-            <div className="text-sm text-muted-foreground">
-              {new Date().toLocaleDateString("en-US", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+    <div
+      className="min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${currentTheme.bgPattern})` }}
+    >
+      <div
+        className={`min-h-screen ${currentTheme.bgOverlay} backdrop-blur-sm`}
+      >
+        <div className="flex h-screen">
+          <Sidebar />
+          <main className="flex-1 overflow-y-auto">
+            <header className="sticky top-0 z-10 backdrop-blur-md bg-white/50 border-b p-4">
+              <div className="flex items-center justify-between max-w-full mx-auto">
+                <div className="flex items-center gap-4">
+                  <CompanySelector />
+                  <LanguageSelector />
+                  <ThemeSelector
+                    currentTheme={theme}
+                    onThemeChange={setTheme}
+                  />
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {new Date().toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </div>
+              </div>
+            </header>
+
+            <div className="p-6 space-y-6 max-w-7xl mx-auto">
+              <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+              </div>
+
+              <FleetStatusGrid />
+
+              <div className="grid gap-6 lg:grid-cols-2">
+                <VehicleRequestForm
+                  companyId={mockCompany.id}
+                  userId={mockUser.id}
+                  userEmail={mockUser.email}
+                  userName={mockUser.name}
+                  onSubmit={handleRequestSubmit}
+                />
+                <div className="space-y-6">
+                  <VehicleRequestCalendar requests={mockRequests} />
+                  <VehicleRequestApproval
+                    requests={mockRequests}
+                    currentUserId={mockUser.id}
+                    onRequestUpdated={handleRequestUpdate}
+                  />
+                </div>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-1">
+                <ActiveTripsTable />
+                <MaintenanceSchedule />
+              </div>
             </div>
-          </div>
-        </header>
-
-        <div className="p-6 space-y-6 max-w-7xl mx-auto">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          </div>
-
-          <FleetStatusGrid />
-
-          <div className="grid gap-6 lg:grid-cols-2">
-            <VehicleRequestForm
-              companyId={mockCompany.id}
-              userId={mockUser.id}
-              userEmail={mockUser.email}
-              userName={mockUser.name}
-              onSubmit={handleRequestSubmit}
-            />
-            <div className="space-y-6">
-              <VehicleRequestCalendar requests={mockRequests} />
-              <VehicleRequestApproval
-                requests={mockRequests}
-                currentUserId={mockUser.id}
-                onRequestUpdated={handleRequestUpdate}
-              />
-            </div>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-1">
-            <ActiveTripsTable />
-            <MaintenanceSchedule />
-          </div>
+          </main>
         </div>
-      </main>
+      </div>
     </div>
   );
 };
