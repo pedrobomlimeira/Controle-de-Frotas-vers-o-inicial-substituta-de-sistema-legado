@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
 import { VehicleRequest } from "@/types/vehicle-request";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 import {
   HoverCard,
   HoverCardContent,
@@ -36,12 +36,17 @@ const VehicleRequestCalendar = ({
     const grouped = new Map<string, VehicleRequest[]>();
     requests.forEach((request) => {
       try {
+        // Parse the ISO string to get a Date object
         const startDate = new Date(request.startDate);
+        if (!isValid(startDate)) {
+          console.error("Invalid date:", request.startDate);
+          return;
+        }
         const dateKey = format(startDate, "yyyy-MM-dd");
         const existing = grouped.get(dateKey) || [];
         grouped.set(dateKey, [...existing, request]);
       } catch (error) {
-        console.error("Invalid date format:", request.startDate);
+        console.error("Error processing request date:", error);
       }
     });
     return grouped;
@@ -50,6 +55,11 @@ const VehicleRequestCalendar = ({
   // Custom day render to show requests
   const renderDay = (day: Date) => {
     try {
+      if (!isValid(day)) {
+        console.error("Invalid day provided to renderDay");
+        return null;
+      }
+
       const dateKey = format(day, "yyyy-MM-dd");
       const dayRequests = requestsByDate.get(dateKey) || [];
 
@@ -119,6 +129,18 @@ const VehicleRequestCalendar = ({
     }
   };
 
+  const SafeDay = ({ day, ...props }: { day: Date }) => {
+    if (!isValid(day)) {
+      return <div {...props}>-</div>;
+    }
+    return (
+      <div {...props}>
+        {format(day, "d")}
+        {renderDay(day)}
+      </div>
+    );
+  };
+
   return (
     <Card className="w-full bg-white">
       <CardHeader>
@@ -137,12 +159,7 @@ const VehicleRequestCalendar = ({
           onSelect={onDateSelect}
           className="rounded-md border"
           components={{
-            Day: ({ day, ...props }) => (
-              <div {...props}>
-                {format(day, "d")}
-                {renderDay(day)}
-              </div>
-            ),
+            Day: SafeDay,
           }}
         />
       </CardContent>
