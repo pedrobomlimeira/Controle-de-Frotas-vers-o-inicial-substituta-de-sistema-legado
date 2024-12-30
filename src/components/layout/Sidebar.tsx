@@ -18,9 +18,9 @@ interface SidebarProps {
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Fleet Status", path: "/" },
+  { icon: MapPin, label: "Trips", path: "/trips" },
   { icon: Car, label: "Vehicles", path: "/vehicles" },
   { icon: Users, label: "Drivers", path: "/drivers" },
-  { icon: MapPin, label: "Trips", path: "/trips" },
   { icon: Wrench, label: "Maintenance", path: "/maintenance" },
   { icon: Receipt, label: "Expenses", path: "/expenses" },
   { icon: FileText, label: "Reports", path: "/reports" },
