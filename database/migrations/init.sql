@@ -99,3 +99,40 @@ CREATE TABLE trips (
     notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Create vehicle_types table
+CREATE TABLE vehicle_types (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(50) UNIQUE NOT NULL
+);
+
+-- Create driver_statuses table
+CREATE TABLE driver_statuses (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(50) UNIQUE NOT NULL
+);
+
+-- Create service_types table
+CREATE TABLE service_types (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- Create vehicle_request_types table
+CREATE TABLE vehicle_request_types (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(50) UNIQUE NOT NULL
+);
+
+-- Alter vehicles table to reference vehicle_types
+ALTER TABLE vehicles ADD COLUMN type_id UUID REFERENCES vehicle_types(id);
+
+-- Alter drivers table to reference driver_statuses
+ALTER TABLE drivers ADD COLUMN status_id UUID REFERENCES driver_statuses(id);
+
+-- Alter maintenance table to reference service_types
+ALTER TABLE maintenance ADD COLUMN service_type_id UUID REFERENCES service_types(id);
+
+-- Alter vehicle_requests table to reference vehicle_request_types
+ALTER TABLE vehicle_requests ADD COLUMN request_type_id UUID REFERENCES vehicle_request_types(id);
+{{ ... }}

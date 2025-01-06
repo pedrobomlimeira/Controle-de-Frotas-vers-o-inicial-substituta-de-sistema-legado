@@ -16,3 +16,25 @@ INSERT INTO vehicles (company_id, plate, model, type, year, vin) VALUES
 INSERT INTO drivers (company_id, name, email, phone, license_number, license_expiry) VALUES
 ('550e8400-e29b-41d4-a716-446655440000', 'John Doe', 'john@fleet.com', '555-0123', 'DL123456', '2024-12-31'),
 ('550e8400-e29b-41d4-a716-446655440000', 'Jane Smith', 'jane@fleet.com', '555-0124', 'DL789012', '2024-12-31');
+
+-- Insert demo vehicle types
+INSERT INTO vehicle_types (id, name) VALUES 
+(uuid_generate_v4(), 'Carro'),
+(uuid_generate_v4(), 'Van'),
+(uuid_generate_v4(), 'Caminhão');
+
+-- Insert demo driver statuses
+INSERT INTO driver_statuses (id, name) VALUES 
+(uuid_generate_v4(), 'Disponível'),
+(uuid_generate_v4(), 'Indisponível');
+
+-- Insert demo service types
+INSERT INTO service_types (id, name) VALUES 
+(uuid_generate_v4(), 'Manutenção Preventiva'),
+(uuid_generate_v4(), 'Reparo');
+
+-- Insert demo vehicle request types
+INSERT INTO vehicle_request_types (id, name) VALUES 
+(uuid_generate_v4(), 'Solicitação de Viagem'),
+(uuid_generate_v4(), 'Solicitação de Manutenção');
+{{ ... }}
