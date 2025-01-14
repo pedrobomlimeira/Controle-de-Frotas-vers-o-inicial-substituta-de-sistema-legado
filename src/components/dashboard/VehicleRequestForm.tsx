@@ -273,7 +273,22 @@ const VehicleRequestForm = ({
           </div>
 
           <div className="flex justify-end space-x-2">
-            <Button variant="outline" type="button">
+            <Button 
+              variant="outline" 
+              type="button"
+              onClick={() => {
+                setStartDate(undefined);
+                setEndDate(undefined);
+                setStartTime("");
+                setEndTime("");
+                setVehicleType("");
+                setPassengers("");
+                setDestination("");
+                setPurpose("");
+                setNotes("");
+                setAvailability(undefined);
+              }}
+            >
               Cancel
             </Button>
             <Button
