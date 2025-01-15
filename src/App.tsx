@@ -1,10 +1,5 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import { useRoutes, Routes, Route, Navigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
-import { vehicleRequestsApi } from "@/lib/api/vehicle-requests";
-import { vehiclesApi } from "@/lib/api/vehicles";
-import { driversApi } from "@/lib/api/drivers";
-import { maintenanceApi } from "@/lib/api/maintenance";
 import Home from "./components/home";
 import Trips from "./components/trips/TripForm";
 import Vehicles from "./components/vehicles/VehicleForm";
@@ -15,44 +10,8 @@ import Reports from "./components/reports/ReportForm";
 import routes from "tempo-routes";
 
 function App() {
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const { toast } = useToast();
-
-  const handleSubmit = async (data: any) => {
-    setIsSubmitting(true);
-    try {
-      // Determine which API to call based on the form type
-      let response;
-      if (data.vehicleId) {
-        // Trip form
-        response = await vehicleRequestsApi.create(data);
-      } else if (data.plate) {
-        // Vehicle form
-        response = await vehiclesApi.create(data);
-      } else if (data.licenseNumber) {
-        // Driver form
-        response = await driversApi.create(data);
-      } else if (data.maintenanceType) {
-        // Maintenance form
-        response = await maintenanceApi.create(data);
-      }
-
-      toast({
-        title: "Success",
-        description: "Record created successfully",
-      });
-      
-      // Optionally redirect or refresh data
-      window.location.reload();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to create record",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleSubmit = (data: any) => {
+    console.log('Form submitted:', data);
   };
 
   return (

@@ -10,5 +10,3 @@ export const maintenanceApi = {
 
     if (error) throw error;
     return result;
-  },
-};
