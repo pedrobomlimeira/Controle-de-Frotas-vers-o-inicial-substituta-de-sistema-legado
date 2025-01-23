@@ -7,7 +7,6 @@ import Drivers from "./components/drivers/DriverForm";
 import Maintenance from "./components/maintenance/MaintenanceForm";
 import Expenses from "./components/expenses/ExpenseForm";
 import Reports from "./components/reports/ReportForm";
-import CompanyManagement from './components/company/CompanyManagement';
 import routes from "tempo-routes";
 import UserManagement from './components/users/UserManagement'; // Adjust the import path as necessary
 
@@ -42,6 +41,9 @@ function App() {
           <Route path="/reports" element={<Reports onSubmit={handleSubmit} />} />
           <Route path="/companies" element={<CompanyManagement />} />
           {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
+          <Route path="/admin/users" element={<UsersList />} />
+          <Route path="/admin/users/new" element={<UserForm onSubmit={handleSubmit} />} />
+          <Route path="/admin/users/:id" element={<UserForm onSubmit={handleSubmit} />} />
           <Route path="*" element={<Navigate to="/" />} />
           <Route path="/users" element={<UserManagement />} />
         </Routes>

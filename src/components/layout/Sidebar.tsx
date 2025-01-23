@@ -8,7 +8,7 @@ import {
   Wrench,
   Receipt,
   FileText,
-  Briefcase,
+  Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LogIn as LogsIcon } from 'lucide-react'; // Adjust imports as necessary
@@ -29,9 +29,11 @@ const menuItems = [
   { icon: Wrench, label: "Maintenance", path: "/maintenance" },
   { icon: Receipt, label: "Expenses", path: "/expenses" },
   { icon: FileText, label: "Reports", path: "/reports" },
-  { icon: Briefcase, label: "Companies", path: "/companies" },
-  { icon: Users, label: "Users", path: "/users" },
-  { icon: LogsIcon, label: "Logs", path: "/logs" },
+];
+
+const adminItems = [
+  { icon: Users, label: "Manage Users", path: "/admin/users" },
+  { icon: Settings, label: "System Settings", path: "/admin/settings" },
 ];
 
 const Sidebar = ({ className = "", activePath = "/" }: SidebarProps) => {
@@ -71,6 +73,32 @@ const Sidebar = ({ className = "", activePath = "/" }: SidebarProps) => {
             </Link>
           );
         })}
+
+        <div className="pt-4 border-t border-border/50">
+          <p className="px-4 mb-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            Admin
+          </p>
+          {adminItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = activePath === item.path;
+
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={cn(
+                  "flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+                  isActive
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                )}
+              >
+                <Icon className="h-5 w-5" />
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
       </nav>
 
       <div className="mt-auto px-4 py-4 border-t border-border/50">
