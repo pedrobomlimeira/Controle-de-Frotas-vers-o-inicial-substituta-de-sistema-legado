@@ -7,11 +7,25 @@ import Drivers from "./components/drivers/DriverForm";
 import Maintenance from "./components/maintenance/MaintenanceForm";
 import Expenses from "./components/expenses/ExpenseForm";
 import Reports from "./components/reports/ReportForm";
+import CompanyManagement from './components/company/CompanyManagement';
 import routes from "tempo-routes";
 
 function App() {
-  const handleSubmit = (data: any) => {
+  const handleSubmit = async (data: any) => {
     console.log('Form submitted:', data);
+
+    // Assuming you have functions to fetch and update trips and maintenance
+    if (data.tripId) {
+        const trip = await fetchTrip(data.tripId); // Fetch the trip
+        trip.expenses = [...(trip.expenses || []), ...data.expenses]; // Add new expenses
+        await updateTrip(trip); // Update the trip with new expenses
+    }
+
+    if (data.maintenanceId) {
+        const maintenance = await fetchMaintenance(data.maintenanceId); // Fetch the maintenance
+        maintenance.expenses = [...(maintenance.expenses || []), ...data.expenses]; // Add new expenses
+        await updateMaintenance(maintenance); // Update the maintenance with new expenses
+    }
   };
 
   return (
@@ -25,6 +39,7 @@ function App() {
           <Route path="/maintenance" element={<Maintenance onSubmit={handleSubmit} vehicles={[]} />} />
           <Route path="/expenses" element={<Expenses onSubmit={handleSubmit} />} />
           <Route path="/reports" element={<Reports onSubmit={handleSubmit} />} />
+          <Route path="/companies" element={<CompanyManagement />} />
           {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

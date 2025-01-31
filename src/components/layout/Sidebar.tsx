@@ -8,6 +8,7 @@ import {
   Wrench,
   Receipt,
   FileText,
+  Briefcase,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -24,6 +25,10 @@ const menuItems = [
   { icon: Wrench, label: "Maintenance", path: "/maintenance" },
   { icon: Receipt, label: "Expenses", path: "/expenses" },
   { icon: FileText, label: "Reports", path: "/reports" },
+  { icon: Briefcase, label: "Companies", path: "/companies" },
+  { icon: Users, label: "Users", path: "/users" },
+  { icon: CompanyIcon, label: "Companies", path: "/companies" }, // New entry for Companies
+  { icon: LogsIcon, label: "Logs", path: "/logs" },
 ];
 
 const Sidebar = ({ className = "", activePath = "/" }: SidebarProps) => {

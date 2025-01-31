@@ -34,10 +34,15 @@ interface Trip {
   startOdometer: number;
   currentOdometer?: number;
   notes?: string;
+  expenses?: Expense[]; // Add this line
 }
 
 interface ActiveTripsTableProps {
   trips?: Trip[];
+}
+
+interface Expense {
+  // Add this interface
 }
 
 const defaultTrips: Trip[] = [

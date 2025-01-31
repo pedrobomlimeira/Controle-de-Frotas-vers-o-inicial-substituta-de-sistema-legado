@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/select";
 import AttachmentsField from "@/components/forms/AttachmentsField";
 import { FileAttachment } from "@/types/file-attachment";
+import { Expense } from "@/types/expense"; // Add this line
+import { Company } from "@/types/Company";
 
 interface MaintenanceFormData {
   id?: string;
@@ -26,6 +28,7 @@ interface MaintenanceFormData {
   serviceProvider: string;
   notes?: string;
   attachments: FileAttachment[];
+  expenses?: Expense[]; // Add this line
 }
 
 interface MaintenanceFormProps {
@@ -49,6 +52,7 @@ const MaintenanceForm = ({
     serviceProvider: "",
     notes: "",
     attachments: [],
+    expenses: [], // Add this line
     ...initialData,
   });
 

@@ -2,18 +2,22 @@ import React from 'react';
 
 interface ExpenseFormProps {
   onSubmit: (data: any) => void;
+  tripId?: any;
+  maintenanceId?: any;
 }
 
-export default function ExpenseForm({ onSubmit }: ExpenseFormProps) {
+export default function ExpenseForm({ onSubmit, tripId, maintenanceId }: ExpenseFormProps) {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit({ tripId, maintenanceId });
+  };
+
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Expenses Management</h1>
       
       <div className="bg-white rounded-lg shadow p-6">
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit({});
-        }}>
+        <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
               <label className="block text-sm font-medium mb-1">Expense Type</label>
