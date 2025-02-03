@@ -11,7 +11,11 @@ import {
   Briefcase,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { LogIn as LogsIcon } from 'lucide-react'; // Adjust imports as necessary
+import { Group as CompanyIcon }  from 'lucide-react'; // Import Company Icon
 
+    // Add other items as needed
+;
 interface SidebarProps {
   className?: string;
   activePath?: string;
