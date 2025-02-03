@@ -9,6 +9,7 @@ import Expenses from "./components/expenses/ExpenseForm";
 import Reports from "./components/reports/ReportForm";
 import CompanyManagement from './components/company/CompanyManagement';
 import routes from "tempo-routes";
+import UserManagement from './components/users/UserManagement'; // Adjust the import path as necessary
 
 function App() {
   const handleSubmit = async (data: any) => {
@@ -42,6 +43,7 @@ function App() {
           <Route path="/companies" element={<CompanyManagement />} />
           {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
           <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/users" element={<UserManagement />} />
         </Routes>
       </Suspense>
     </div>

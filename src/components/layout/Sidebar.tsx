@@ -31,7 +31,6 @@ const menuItems = [
   { icon: FileText, label: "Reports", path: "/reports" },
   { icon: Briefcase, label: "Companies", path: "/companies" },
   { icon: Users, label: "Users", path: "/users" },
-  { icon: CompanyIcon, label: "Companies", path: "/companies" }, // New entry for Companies
   { icon: LogsIcon, label: "Logs", path: "/logs" },
 ];
 
