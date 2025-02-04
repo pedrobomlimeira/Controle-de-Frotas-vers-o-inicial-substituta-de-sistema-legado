@@ -1,53 +1,67 @@
-import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Building2 } from "lucide-react";
+// src/components/layout/CompanySelector.tsx
+import React, { useEffect, useState } from 'react';
+import { Company } from '@/types/Company'; // Import the Company type
+import { useTable } from 'react-table'; // Import from React Table
 
-interface Company {
-  id: string;
-  name: string;
-  logo?: string;
-}
+const CompanySelector = () => {
+    const [companies, setCompanies] = useState<Company[]>([]);
 
-interface CompanySelectorProps {
-  companies?: Company[];
-  currentCompany?: string;
-  onCompanyChange?: (companyId: string) => void;
-}
+    useEffect(() => {
+        fetchCompanies();
+    }, []);
 
-const defaultCompanies: Company[] = [
-  { id: "1", name: "Transport Co. Ltd" },
-  { id: "2", name: "Logistics Express" },
-  { id: "3", name: "City Deliveries" },
-];
+    const fetchCompanies = async () => {
+        try {
+            const response = await fetch('/api/companies'); // Adjust the API endpoint as necessary
+            const data = await response.json();
+            setCompanies(data.map(company => ({
+                id: company.id,
+                name: company.name,
+                status: company.status,
+                createdAt: company.created_at,
+            })));
+        } catch (error) {
+            console.error('Error fetching companies:', error);
+        }
+    };
 
-const CompanySelector = ({
-  companies = defaultCompanies,
-  currentCompany = "1",
-  onCompanyChange,
-}: CompanySelectorProps) => {
-  return (
-    <div className="flex items-center gap-2 bg-white p-2 rounded-lg shadow-sm">
-      <Building2 className="h-4 w-4 text-muted-foreground" />
-      <Select value={currentCompany} onValueChange={onCompanyChange}>
-        <SelectTrigger className="w-[200px] border-none shadow-none">
-          <SelectValue placeholder="Select company" />
-        </SelectTrigger>
-        <SelectContent>
-          {companies.map((company) => (
-            <SelectItem key={company.id} value={company.id}>
-              {company.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-  );
+    const columns = [
+        { Header: 'ID', accessor: 'id' },
+        { Header: 'Name', accessor: 'name' },
+        { Header: 'Status', accessor: 'status' },
+        { Header: 'Created At', accessor: 'createdAt' },
+    ];
+
+    const tableInstance = useTable({ columns, data: companies });
+
+    return (
+        <div>
+            <h1>Company Selector</h1>
+            <table {...tableInstance.getTableProps()}>
+                <thead>
+                    {tableInstance.headerGroups.map(headerGroup => (
+                        <tr {...headerGroup.getHeaderGroupProps()}>
+                            {headerGroup.headers.map(column => (
+                                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                            ))}
+                        </tr>
+                    ))}
+                </thead>
+                <tbody {...tableInstance.getTableBodyProps()}>
+                    {tableInstance.rows.map(row => {
+                        tableInstance.prepareRow(row);
+                        return (
+                            <tr {...row.getRowProps()}>
+                                {row.cells.map(cell => (
+                                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                ))}
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </div>
+    );
 };
 
 export default CompanySelector;
