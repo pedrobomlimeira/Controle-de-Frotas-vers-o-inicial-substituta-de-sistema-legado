@@ -25,9 +25,9 @@ const MaintenanceServices = () => {
     loadGroups();
   }, []);
 
-  const loadServices = async () => {
+  const loadServices = async (groupId?: number | null) => {
     try {
-      const data = await maintenanceApi.getServicesByGroup(selectedGroupId);
+      const data = await maintenanceApi.getServicesByGroup(groupId);
       setServices(data);
     } catch (error) {
       console.error("Error loading services:", error);
@@ -53,7 +53,28 @@ const MaintenanceServices = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Maintenance Services</h1>
-        <Button onClick={() => setShowForm(true)}>Add Service</Button>
+        <div className="flex items-center gap-4">
+          <Select 
+            value={selectedGroupId?.toString() || ""}
+            onValueChange={(value) => {
+              setSelectedGroupId(value ? parseInt(value) : null);
+              loadServices(value ? parseInt(value) : null);
+            }}
+          >
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Select group" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All Groups</SelectItem>
+              {groups.map(group => (
+                <SelectItem key={group.id} value={group.id.toString()}>
+                  {group.description}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button onClick={() => setShowForm(true)}>Add Service</Button>
+        </div>
       </div>
 
       <Table>
